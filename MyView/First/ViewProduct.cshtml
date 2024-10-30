@@ -1,0 +1,12 @@
+@model AspMVCEcomerce.Models.Product
+@{
+    Layout = "_layout";
+}
+<div class="card bg-danger text-white">
+    <h1 class="card-header">@Model.Name</h1>
+    <div class="card-body">
+        <p class="card-text">
+            price: @Model.Price
+        </p>
+    </div>
+</div>
