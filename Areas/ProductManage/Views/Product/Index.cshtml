@@ -1,0 +1,13 @@
+@using AspMVCEcomerce.Models
+
+@model List<Product>
+
+<h1>All List of Products</h1>
+
+<div class="list-group">
+    @foreach(var p in Model){
+        <div class="list-group-item">
+            @p.Name
+        </div>    
+    }
+</div>

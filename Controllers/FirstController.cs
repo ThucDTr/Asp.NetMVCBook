@@ -37,11 +37,12 @@ namespace AspMVCEcomerce.Controllers
 
         [TempData]
         public string ThongBao { get; set; }
+
         public IActionResult ViewProduct(int? id){
             var product = _productservice.Where(p => p.Id == id).FirstOrDefault();
             if(product == null){
                ThongBao = "San Pham Ban Yeu Cau Khong Co";
-               return Redirect(Url.Action("Index", "Home"));
+               return Redirect(Url?.Action("Index", "Home"));
             }
 
             this.ViewData["product"] = product;

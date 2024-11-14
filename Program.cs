@@ -13,6 +13,7 @@ builder.Services.Configure<RazorViewEngineOptions>(options => {
 });
 
 builder.Services.AddSingleton<ProductService>();
+builder.Services.AddSingleton<PlanetService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -25,15 +26,30 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.UseStatusCodePages(async context =>
+{
+    var response = context.HttpContext.Response;
+    response.ContentType = "text/plain";
+    await response.WriteAsync($"Error: Status code {response.StatusCode}");
+});
+
 
 app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.MapControllers();
+
+app.MapAreaControllerRoute(
+    name: "Product",
+    pattern: "{controller}/{action=Index}/{id?}",
+    areaName: "ProductManage"
+);
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.MapRazorPages();
+
 app.Run();
