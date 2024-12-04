@@ -1,0 +1,60 @@
+@using Microsoft.EntityFrameworkCore
+@using System.Data
+@using AspMVCEcomerce.Models
+
+@inject MyEcommerceDB dbContext
+   
+@{
+    ViewData["Title"] = "Thong tin DB";
+    var connect = dbContext.Database.GetDbConnection();
+    var dbName = connect.Database;
+    var canConnect = dbContext.Database.CanConnect();
+}
+
+<partial name="_ViewAlerts" />
+   
+<h2>Information</h2>
+<p>Database: @dbName</p>
+<p>Source: @connect.DataSource</p>
+<p>State: @connect.State</p>
+
+<hr>
+<h2>Migrations</h2>
+
+@foreach(var mg in dbContext.Database.GetAppliedMigrations()){
+    <p>@mg</p>
+}
+
+@foreach(var mg in dbContext.Database.GetPendingMigrations()){
+    <p>@mg (pending)</p> 
+}
+
+@if(!canConnect){
+    <p class="alert alert-danger">No Connect</p>
+}
+
+@if(dbContext.Database.GetPendingMigrations().Any()){
+    <form method="post">
+        <button class="btn btn-success" asp-action="Migrate">
+            Tao Migrations
+        </button>
+    </form>
+}
+
+
+@if(canConnect)
+{
+    <h2>Tables</h2>
+    await dbContext.Database.OpenConnectionAsync();
+    var table = dbContext.Database.GetDbConnection().GetSchema("Tables");
+    <ul>
+        <li>
+            @foreach(System.Data.DataRow row in table.Rows){
+                @row["TABLE_NAME"];
+            }
+        </li>
+    </ul>
+    <a asp-action="DeleteDb" class="btn btn-danger">Delete Database: @dbName</a>
+
+}
+

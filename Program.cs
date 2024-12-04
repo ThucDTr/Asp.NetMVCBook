@@ -1,5 +1,7 @@
+using AspMVCEcomerce.Models;
 using AspMVCEcomerce.Service;
 using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +9,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddRazorPages();
+
+builder.Services.AddDbContext<MyEcommerceDB>(options => {
+    options.UseSqlServer(builder.Configuration.GetConnectionString("MyBlogContext"));
+});
 
 builder.Services.Configure<RazorViewEngineOptions>(options => {
     options.ViewLocationFormats.Add("/MyView/{1}/{0}" + RazorViewEngine.ViewExtension);
@@ -46,6 +52,13 @@ app.MapAreaControllerRoute(
     pattern: "{controller}/{action=Index}/{id?}",
     areaName: "ProductManage"
 );
+
+app.MapAreaControllerRoute(
+    name: "Database",
+    pattern: "{controller}/{action=Index}/{id?}",
+    areaName: "Database"
+);
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
