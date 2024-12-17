@@ -4,11 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using AspMVCEcomerce.Models;
 using AspMVCEcomerce.Models.contact;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace AspMVCEcomerce.Models
 {
-    public class MyEcommerceDB : DbContext
+    public class MyEcommerceDB : IdentityDbContext<AppUser>
     {
         public MyEcommerceDB(DbContextOptions<MyEcommerceDB> options) : base(options){
 
@@ -25,12 +26,12 @@ namespace AspMVCEcomerce.Models
         {
             base.OnModelCreating(modelBuilder);
 
-            // foreach(var entityType in modelBuilder.Model.GetEntityTypes()){
-            //     var table = entityType.GetTableName();
-            //     if(table.StartsWith("AspNet")){
-            //         entityType.SetTableName(table.Substring(6));
-            //     }
-            // }
+            foreach(var entityType in modelBuilder.Model.GetEntityTypes()){
+                var table = entityType.GetTableName();
+                if(table.StartsWith("AspNet")){
+                    entityType.SetTableName(table.Substring(6));
+                }
+            }
         }
 
     }
