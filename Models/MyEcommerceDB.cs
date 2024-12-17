@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AspMVCEcomerce.Models;
+using AspMVCEcomerce.Models.contact;
 using Microsoft.EntityFrameworkCore;
 
 namespace AspMVCEcomerce.Models
@@ -12,6 +13,8 @@ namespace AspMVCEcomerce.Models
         public MyEcommerceDB(DbContextOptions<MyEcommerceDB> options) : base(options){
 
         }
+
+        public DbSet<Contact> Contacts { set; get; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

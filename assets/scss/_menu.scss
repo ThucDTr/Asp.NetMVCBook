@@ -1,0 +1,16 @@
+.app-navbar{
+    background: rgba(0,0,0, 0.8);
+    .text-dark{
+        color: #e9adad !important;
+        &:hover{
+            color: #bc8e8e !important;
+        }
+    }
+
+    .navbar-brand{
+        color: #d21023 !important;
+        &:hover{
+            color: #f12539 !important;
+        }
+    }
+  }

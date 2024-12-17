@@ -48,11 +48,11 @@
     await dbContext.Database.OpenConnectionAsync();
     var table = dbContext.Database.GetDbConnection().GetSchema("Tables");
     <ul>
-        <li>
-            @foreach(System.Data.DataRow row in table.Rows){
+        @foreach(System.Data.DataRow row in table.Rows){
+        <li>       
                 @row["TABLE_NAME"];
-            }
         </li>
+         }
     </ul>
     <a asp-action="DeleteDb" class="btn btn-danger">Delete Database: @dbName</a>
 
