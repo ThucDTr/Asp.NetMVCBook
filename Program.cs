@@ -1,3 +1,4 @@
+using App.Services;
 using AspMVCEcomerce.Models;
 using AspMVCEcomerce.Service;
 using Microsoft.AspNetCore.Identity;
@@ -65,7 +66,14 @@ builder.Services.AddAuthentication()
                     options.ClientSecret = googleAuthSections["ClientSecret"];
                     options.CallbackPath = "/Dang-nhap-tu-google";
                 });
-                
+
+builder.Services.AddOptions();
+var mailSetting = builder.Configuration.GetSection("MailSettings");
+builder.Services.Configure<MailSettings>(mailSetting);
+builder.Services.AddSingleton<IEmailSender, SendMailService>();
+
+builder.Services.AddSingleton<IdentityErrorDescriber, AppIdentityErrorDescriber>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
