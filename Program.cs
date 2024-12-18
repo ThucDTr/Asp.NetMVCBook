@@ -1,3 +1,4 @@
+using App.Data;
 using App.Services;
 using AspMVCEcomerce.Models;
 using AspMVCEcomerce.Service;
@@ -20,8 +21,8 @@ builder.Services.Configure<RazorViewEngineOptions>(options => {
     options.ViewLocationFormats.Add("/MyView/{1}/{0}" + RazorViewEngine.ViewExtension);
 });
 
-builder.Services.AddSingleton<ProductService>();
-builder.Services.AddSingleton<PlanetService>();
+builder.Services.AddScoped<ProductService>();
+builder.Services.AddScoped<PlanetService>();
 
 builder.Services.AddIdentity<AppUser, IdentityRole>()
                 .AddEntityFrameworkStores<MyEcommerceDB>()
@@ -72,6 +73,13 @@ var mailSetting = builder.Configuration.GetSection("MailSettings");
 builder.Services.Configure<MailSettings>(mailSetting);
 builder.Services.AddSingleton<IEmailSender, SendMailService>();
 
+builder.Services.AddAuthorization(options => {
+    options.AddPolicy("ViewManageMenu", builder => {
+        builder.RequireAuthenticatedUser();
+        builder.RequireRole(RoleName.Administrator);
+    });
+});
+
 builder.Services.AddSingleton<IdentityErrorDescriber, AppIdentityErrorDescriber>();
 
 var app = builder.Build();
@@ -109,14 +117,20 @@ app.MapAreaControllerRoute(
 
 app.MapAreaControllerRoute(
     name: "Database",
-    pattern: "{controller}/{action=Index}/{id?}",
+    pattern: "Database/{controller}/{action=Index}/{id?}",
     areaName: "Database"
 );
 
 app.MapAreaControllerRoute(
     name: "Contact",
-    pattern: "{controller}/{action=Index}/{id?}",
+    pattern: "Contact/{controller}/{action=Index}/{id?}",
     areaName: "Contact"
+);
+
+app.MapAreaControllerRoute(
+    name: "Identity",
+    pattern: "Identity/{controller}/{action=Index}/{id?}",
+    areaName: "Identity"
 );
 
 app.MapControllerRoute(

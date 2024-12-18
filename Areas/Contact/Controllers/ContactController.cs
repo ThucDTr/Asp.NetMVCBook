@@ -7,10 +7,13 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AspMVCEcomerce.Models;
 using AspMVCEcomerce.Models.contact;
+using Microsoft.AspNetCore.Authorization;
+using App.Data;
 
 namespace AspMVCEcomerce.Areas_Contact_Controllers_
 {
     [Area("Contact")]
+    [Authorize(Roles = RoleName.Administrator)]
     public class ContactController : Controller
     {
         private readonly MyEcommerceDB _context;
@@ -25,6 +28,7 @@ namespace AspMVCEcomerce.Areas_Contact_Controllers_
 
         // GET: Contact
         [HttpGet("/admnin/contact")] 
+
         public async Task<IActionResult> Index()
         {
             return View(await _context.Contacts.ToListAsync());
@@ -50,6 +54,7 @@ namespace AspMVCEcomerce.Areas_Contact_Controllers_
 
         // GET: Contact/Create
         [HttpGet("/contact/")]
+        [AllowAnonymous]
         public IActionResult SendContact()
         {
             return View();
@@ -59,6 +64,7 @@ namespace AspMVCEcomerce.Areas_Contact_Controllers_
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost("/contact")]
+        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SendContact([Bind("FullName,Email,Message,Phone")] Contact contact)
         {
